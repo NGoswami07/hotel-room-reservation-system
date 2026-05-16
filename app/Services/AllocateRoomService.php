@@ -12,16 +12,27 @@ class AllocateRoomService
         $rooms = Room::where('is_booked', false)
             ->orderBy('floor_number')
             ->orderBy('room_number')
-            ->get()
-            ->values();
+            ->get();
 
-        if ($rooms->count() < $requiredRooms) {
-            return collect([]);
+    
+        $groupedFloors = $rooms->groupBy('floor_number');
+
+    
+        foreach ($groupedFloors as $floorRooms) {
+
+            if ($floorRooms->count() >= $requiredRooms) {
+
+                return $floorRooms
+                    ->sortBy('room_number')
+                    ->take($requiredRooms)
+                    ->values();
+            }
         }
 
+    
         $bestCombination = collect([]);
 
-        $bestScore = PHP_INT_MAX;
+        $bestTravelTime = PHP_INT_MAX;
 
         for ($i = 0; $i <= $rooms->count() - $requiredRooms; $i++) {
 
@@ -35,21 +46,9 @@ class AllocateRoomService
 
             $travelTime = TravelTimeHelper::calculate($roomNumbers);
 
-            $floors = $combo
-                ->pluck('floor_number')
-                ->toArray();
+            if ($travelTime < $bestTravelTime) {
 
-            $floorFrequency = array_count_values($floors);
-
-            $maxSameFloor = max($floorFrequency);
-
-            $score = (
-                ($requiredRooms - $maxSameFloor) * 1000
-            ) + $travelTime;
-
-            if ($score < $bestScore) {
-
-                $bestScore = $score;
+                $bestTravelTime = $travelTime;
 
                 $bestCombination = $combo;
             }
