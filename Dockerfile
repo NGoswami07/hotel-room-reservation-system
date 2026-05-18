@@ -21,9 +21,7 @@ RUN composer install --no-dev --optimize-autoloader
 
 RUN npm install && npm run build
 
-RUN touch database/database.sqlite && \
-    php artisan migrate --force && \
-    php artisan db:seed --force
+RUN touch database/database.sqlite
 
 RUN php artisan config:clear && \
     php artisan cache:clear && \
@@ -31,4 +29,6 @@ RUN php artisan config:clear && \
 
 EXPOSE 10000
 
-CMD php -S 0.0.0.0:10000 -t public
+CMD php artisan migrate --force && \
+    php artisan db:seed --force && \
+    php -S 0.0.0.0:10000 -t public
