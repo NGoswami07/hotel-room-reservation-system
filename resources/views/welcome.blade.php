@@ -2,7 +2,9 @@
 <html>
 <head>
     <title>Hotel Room Reservation System</title>
- <script type="module" src="http://localhost:5173/resources/js/app.js"></script>
+<link rel="stylesheet" href="/build/assets/app-DsaGMsKc.css">
+
+    <script type="module" src="/build/assets/app-B7zh8006.js"></script>
 </head>
 <body>
     <div id="app"></div>
