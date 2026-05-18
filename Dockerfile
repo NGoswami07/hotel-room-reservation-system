@@ -21,6 +21,10 @@ RUN composer install --no-dev --optimize-autoloader
 
 RUN npm install && npm run build
 
+RUN touch database/database.sqlite && \
+    php artisan migrate --force && \
+    php artisan db:seed --force
+
 RUN php artisan config:clear && \
     php artisan cache:clear && \
     php artisan view:clear
