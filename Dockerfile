@@ -27,8 +27,9 @@ RUN php artisan config:clear && \
     php artisan cache:clear && \
     php artisan view:clear
 
+# run migrations once during build
+RUN php artisan migrate --force || true
+
 EXPOSE 10000
 
-CMD php artisan migrate --force && \
-    php artisan db:seed --force && \
-    php -S 0.0.0.0:10000 -t public
+CMD php -S 0.0.0.0:10000 -t public
