@@ -2,7 +2,7 @@
 <html>
 <head>
     <title>Hotel Room Reservation System</title>
-@vite(['resources/js/app.js'])
+ <script type="module" src="http://localhost:5173/resources/js/app.js"></script>
 </head>
 <body>
     <div id="app"></div>
